@@ -54,6 +54,20 @@ app.get("/educaterDB", async function (request, response) {
   });
 });
 
+// for student dashboard
+app.get("/studentDB", async function (request, response) {
+  response.render("studentDB", {
+    title: "Todo Application",
+  });
+});
+
+// for student's mycourses
+app.get("/myCourses", async function (request, response) {
+  response.render("myCourses", {
+    title: "Todo Application",
+  });
+});
+
 app.listen(3000, () => {
   // the server port at this present
   console.log("Started express server at port 3000");
