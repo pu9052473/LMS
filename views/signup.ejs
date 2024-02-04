@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-Token" content="<%= csrfToken %>">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body style="background-size: cover;  background-image: url(https://img.freepik.com/free-photo/vivid-blurred-colorful-background_58702-2655.jpg?w=996&t=st=1706869737~exp=1706870337~hmac=b9ec510cc22e281daaf53bb802d25d25020c1e50675e0a67cfaf9a04ff625dbe);">
+    <div class="header grid grid-cols-6">
+        <div class="col-start-3 col-span-2">
+            <p class="text-3xl text-violet-700">Signup as a new user</p>
+            <div class="mt-2">
+                <%- include('notification.ejs') %>
+            </div>
+                <form action="/users" method="post">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <div class="py-3 pt-5">
+                    <label for="dropdown" class="mr-2">SignUp As</label>
+                    <select id="dropdown" name="role">
+                        <option value="Educator">Teacher</option>
+                        <option value="Student">Student</option>
+                    </select>
+                </div>
+                <div class="py-3">
+                    <label for="fullName">FullName:</label>
+                    <input class="border border-slate-400 rounded p-2.5 text-gray-900 w-full text-sm leading-4"
+                        type="text" name="fullName" id="" />
+                </div>
+                <div class="py-3">
+                    <label for="email">Email:</label>
+                    <input class="border border-slate-400 rounded p-2.5 text-gray-900 w-full text-sm leading-4"
+                        type="text" name="email" id="" />
+                </div>
+                <div class="py-3">
+                    <label for="password">Password:</label>
+                    <input class="border border-slate-400 rounded p-2.5 text-gray-900 w-full text-sm leading-4"
+                        type="password" name="password" id="password" />
+                </div>
+                <div class="py-3">
+                    <button
+                        class="cursor-pointer transition-all bg-blue-500 text-white px-4 py-1 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px]border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] leading-4"
+                        type="submit">Signup</button>
+                    <a href="/login" class="ml-3"> If you are already a user? SignIn</a>
+                </div>
+            </form>
+            <span onclick="showpassword()" class="h-fit w-fit " id="eye-open"
+                style="position: relative;left: 470px;bottom: 93px;">
+                <ion-icon name="eye-outline" class="h-6  w-6"></ion-icon>
+            </span>
+
+            <span onclick="showpassword()" class="h-fit w-fit hidden" id="eye-close"
+                style="position: relative;left: 470px;bottom: 93px;">
+                <ion-icon class="h-6  w-6" name="eye-off-outline"></ion-icon>
+            </span>
+        </div>
+    </div>
+    <script>
+        function showpassword() {
+            const password = document.getElementById('password');
+            const eyeOpen = document.getElementById('eye-open');
+            const eyeClose = document.getElementById('eye-close');
+            if (password.type === "password") {
+                password.type = "text";
+                eyeClose.style.display = "block";
+                eyeOpen.style.display = "none";
+
+            } else {
+                password.type = "password";
+                eyeClose.style.display = "none";
+                eyeOpen.style.display = "block";
+            }
+        }
+    </script>
+</body>
