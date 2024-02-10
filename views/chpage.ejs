@@ -1,37 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-Token" content="<%= csrfToken %>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <title>
+        <%= title %>
+    </title>
+    <script>
+        var token = document.querySelector('meta[name="csrf-Token"]').getAttribute("content");
+
+        function deletecourse(id) {
+            fetch(`/chapter/${id}/delete`, {
+                method: "delete",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({
+                    "_csrf": token
+                })
+            })
+                .then((res) => {
+                    if (res.ok) {
+                        alert(`Chapter deleted succesfully`);
+                        window.location.href = "/course/<%= currentCourse[0].id %>"
+                    }
+                })
+                .catch((err) => {
+                    console.log(error);
+                })
+        }
+    </script>
 </head>
-<body>
+<body
+    style=" font-family:serif; background-size: cover; background-image: url(https://img.freepik.com/free-photo/vivid-blurred-colorful-background_58702-2655.jpg?w=996&t=st=1706869737~exp=1706870337~hmac=b9ec510cc22e281daaf53bb802d25d25020c1e50675e0a67cfaf9a04ff625dbe);">
     <div class="flex mt-10 ">
-        <a href="/"  class="ml-80 underline decoration-blue-400 text-blue-600">Home</a>
+        <a href="/EducatorDB" class="ml-80 underline decoration-blue-400 text-blue-600">Back To Dashboard</a>
         <p class="ml-3 text-blue-600">></p>
-        <a href="/"  class="underline decoration-blue-400 text-blue-600">course name</a>
-        <p class="ml-2"> >chapter name</p>
+        <a href="/course/<%= currentCourse[0].id %>" class="underline decoration-blue-400 text-blue-600">
+            <%= currentCourse[0].title %>
+        </a>
+        <p class="ml-2 text-blue-600">></p>
+            <a href="/course/<%= CurrentChapter.id %>/chapterList" class="underline decoration-blue-400 text-blue-600">
+                <%= CurrentChapter.name %>
+            </a>
     </div>
     <div class="flex mt-7 mb-10 ml-80 ">
-        <h1 class="text-7xl font-semibold " style="color:#871be6">chapter Name</h1>
-        <a href="/"  class="ml-60 mt-10 underline decoration-blue-400 text-blue-600">Edit</a>
-        <a href="/"  class="ml-5 mt-10 underline decoration-blue-400 text-blue-600">Delete</a>
+        <h1 class="text-7xl font-semibold text-violet-700 ">
+            <%= CurrentChapter.name %>
+        </h1>
+        <div class="flex mt-5">
+            <% if(currentUser.role==="Educator" ){%>
+                <% if(currentCourse[0].userId === currentUser.id){ %>
+                    <button
+                        class="ml-48 w-[70px] bg-pink-300 h-[40px] mb-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#f777f7] before:to-[#9937f0] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0 text-[#fff]"
+                        onclick="deletecourse(<%= CurrentChapter.id %>)">
+                        Delete
+                    </button>
+                    <% }} %>
+        </div>
     </div>
-    <div class="ml-60 text-purple-700">
-        <p >_____________________________________________________________________________________________________________________________________________________</p>
+    <div class="mx-40">
+        <hr class="border-t-2 border-purple-700">
+
     </div>
-    <div class="flex mt-5 ml-80 text-5xl text-pink-500 " >
-        <p>Pages</p>
+    <div class="flex mt-5 ml-80 ">
+        <% if(currentUser.role==="Educator" ){%>
+            <% if(currentCourse[0].userId===currentUser.id){ %>
+                <a href="/chapter/<%= CurrentChapter.id %>/createpage">
+                    <button
+                        class=" w-[170px] bg-pink-300 h-[50px] my-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#f777f7] before:to-[#9937f0] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0 text-[#fff]">
+                        Create a new page
+                    </button>
+                </a>
+                <% }} %>
     </div>
     <div class="flex mt-5 ml-80 text-2xl">
-        <p>There are no pages available.  Create one?</p>
-    </div>
-    <div class="flex mt-5 ml-80">
-        <a href="#">
-          <button class="w-[170px] bg-pink-300 h-[50px] my-3 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#6b08c4] before:to-[#9937f0] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0 text-[#fff]">
-            Create a new page
-          </button>
-        </a>
-    </div>
-</body>
-</html>
+        <% if(pagesOfChapter.length===0){ %>
+            <p>There are no pages available. Create one?</p>
+            <% } else { %>
+                <div class="flex mt-5   text-pink-500 ">   
+                <a href="/chapter/<%= CurrentChapter.id %>/pageList">
+                    <button
+                    class="  w-[170px] bg-pink-300 h-[50px] my-1 flex items-center justify-center rounded-xl cursor-pointer relative overflow-hidden transition-all duration-500 ease-in-out shadow-md hover:scale-105 hover:shadow-lg before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-[#f777f7] before:to-[#9937f0] before:transition-all before:duration-500 before:ease-in-out before:z-[-1] before:rounded-xl hover:before:left-0 text-[#fff]">
+                    page-List
+                </button>
+            </a>
+        </div>
+                <% } %>
+            </div>
+        </body> 
+        </html>
+       
