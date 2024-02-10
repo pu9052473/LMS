@@ -6,7 +6,8 @@
     "start": "nodemon -e js,ejs",
     "pretest": "cross-env NODE_ENV=test npx sequelize-cli db:drop && cross-env NODE_ENV=test npx sequelize-cli db:create",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles",
-    "start:prod": "node index.js"
+    "start:prod": "node index.js",
+    "migrate-db": "sequelize-cli db:migrate"
   },
   "author": "",
   "license": "ISC",
