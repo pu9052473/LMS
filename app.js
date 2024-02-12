@@ -141,7 +141,7 @@ app.post("/users", async (request, response) => {
 
       const role = request.body.role;
       if (role === "Educator") {
-        response.redirect("EducatorDB");
+        response.redirect("teacherDB");
       } else if (role === "Student") {
         response.redirect("studentDB");
       }
@@ -155,7 +155,7 @@ app.post("/users", async (request, response) => {
 app.get("/login", async function (request, response) {
   if (request.isAuthenticated()) {
     if (request.user.role == "Educator") {
-      response.redirect("/EducatorDB");
+      response.redirect("/teacherDB");
     } else if (request.user.role == "Student") {
       response.redirect("/studentDB");
     }
@@ -177,7 +177,7 @@ app.post(
   (request, response) => {
     // console.log(request.user);
     if (request.user.role == "Educator") {
-      response.redirect("/EducatorDB");
+      response.redirect("/teacherDB");
     } else if (request.user.role == "Student") {
       response.redirect("/studentDB");
     } else {
@@ -234,7 +234,7 @@ app.get("/signout", (request, response, next) => {
 
 // for educater dashboard
 app.get(
-  "/EducatorDB",
+  "/teacherDB",
   ConnectEnsureLogin.ensureLoggedIn(),
   async function (request, response) {
     const currentUser = request.user;
@@ -270,7 +270,7 @@ app.get(
     if (request.user.role === "Student") {
       response.redirect("/studentDB");
     } else {
-      response.render("EducaterDB", {
+      response.render("teacherDB", {
         title: `${currentUser.fullName}'s Teacher-Dashboard`,
         currentUser,
         sortedAllCourses,
@@ -352,7 +352,7 @@ app.post(
         userId: currentUser.id,
       });
       // console.log("course created");
-      return response.redirect("/EducatorDB");
+      return response.redirect("/teacherDB");
     } catch (error) {
       console.log(error);
       return response.status(422).json(error);
@@ -807,7 +807,7 @@ app.get(
     );
 
     if (currentUser.role === "Educator") {
-      response.redirect("/EducatorDB");
+      response.redirect("/teacherDB");
     } else {
       response.render("studentDB", {
         title: `${currentUser.fullName}'s Student_Dashboard`,
