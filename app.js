@@ -11,9 +11,6 @@ const saltRounds = 10;
 const passport = require("passport");
 const ConnectEnsureLogin = require("connect-ensure-login");
 const session = require("express-session");
-const SequelizeStore = require("connect-session-sequelize")(session.Store);
-const sequelize = require("./config/config.json"); // Adjust the path as needed
-const Session = require("./models/Session"); // Adjust the path as needed
 const flash = require("connect-flash");
 const LocalStrategy = require("passport-local");
 const { json } = require("sequelize");
@@ -29,27 +26,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs"); // it calls file who have ejs and set that as view engine
 app.use(flash());
 
-// app.use(
-//   session({
-//     secret: "my-super-secret-key-21728172615261562",
-//     cookie: {
-//       maxAge: 24 * 60 * 60 * 1000, //24hrs
-//     },
-//   })
-// );
-
-const sessionStore = new SequelizeStore({
-  db: sequelize,
-  expiration: 24 * 60 * 60 * 1000, // Session expiration time (optional)
-});
-
 app.use(
   session({
     secret: "my-super-secret-key-21728172615261562",
-    resave: false,
-    saveUninitialized: true,
-    store: sessionStore,
-    cookie: { secure: true }, // Set to true if using HTTPS
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000, //24hrs
+    },
   })
 );
 
@@ -1037,7 +1019,5 @@ app.get(
     }
   }
 );
-
-sequelize.sync();
 
 module.exports = app;
